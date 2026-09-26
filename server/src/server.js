@@ -8,6 +8,10 @@ const rateLimit = require('express-rate-limit')
 
 const app = express()
 
+// Render runs the app behind a proxy — without this, express-rate-limit would
+// treat every visitor as the same IP and lock the whole site out of admin login
+app.set('trust proxy', 1)
+
 // Security middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }

@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+// Relative by default: in dev the Vite proxy forwards /api to localhost:5000,
+// in production the Vercel rewrite forwards /api to the Render backend.
+// Same-origin requests are what let the admin auth cookie actually stick.
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
