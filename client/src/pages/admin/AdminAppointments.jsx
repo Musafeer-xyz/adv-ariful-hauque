@@ -99,7 +99,7 @@ const AdminAppointments = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Subject</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">TrxID / Paid From</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Payment Ref</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Payment</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
@@ -131,8 +131,7 @@ const AdminAppointments = () => {
                       {appointment.time}
                     </td>
                     <td className="px-6 py-4 text-gray-600">
-                      <div className="font-mono text-sm">{appointment.transactionId || '—'}</div>
-                      <div className="text-sm text-gray-500">{appointment.paymentNumber || ''}</div>
+                      <div className="font-mono text-sm">{appointment.paymentRef || appointment.transactionId || appointment.paymentNumber || '—'}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 text-xs font-medium rounded ${getPaymentStatusColor(appointment.payment_status)}`}>

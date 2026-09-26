@@ -12,8 +12,7 @@ router.post('/', [
   body('subject').trim().notEmpty().withMessage('Subject is required'),
   body('date').isISO8601().withMessage('Valid date is required'),
   body('time').trim().notEmpty().withMessage('Time is required'),
-  body('transactionId').trim().notEmpty().withMessage('Transaction ID is required'),
-  body('paymentNumber').trim().notEmpty().withMessage('Payment number is required')
+  body('paymentRef').trim().notEmpty().withMessage('Transaction ID or payment number is required'),
 ], async (req, res) => {
   try {
     const errors = validationResult(req)
@@ -21,7 +20,7 @@ router.post('/', [
       return res.status(400).json({ errors: errors.array() })
     }
 
-    const { name, phone, address, subject, date, time, transactionId, paymentNumber } = req.body
+    const { name, phone, address, subject, date, time, paymentRef } = req.body
 
     // Check if slot exists and is available
     const slotDay = await SlotDay.findOne({ date: new Date(date) })
@@ -53,8 +52,7 @@ router.post('/', [
       subject,
       date: new Date(date),
       time,
-      transactionId,
-      paymentNumber,
+      paymentRef,
       payment_status: 'pending',
       status: 'awaiting'
     })

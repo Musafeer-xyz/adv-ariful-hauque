@@ -19,8 +19,7 @@ const Appointment = () => {
     phone: '',
     address: '',
     subject: '',
-    transactionId: '',
-    paymentNumber: ''
+    paymentRef: ''
   })
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -114,10 +113,8 @@ const Appointment = () => {
       selectDistrict: 'Select district',
       subject: 'Subject/Practice Area',
       selectSubject: 'Select a subject',
-      transactionId: 'Transaction ID (TrxID)',
-      transactionIdPh: 'e.g. 9GH2XK7QTP',
-      paymentNumber: 'Payment Sent From (number)',
-      paymentNumberPh: '01XXXXXXXXX (if different from your number)',
+      paymentRef: 'Transaction ID or Payment Number',
+      paymentRefPh: 'TrxID (e.g. 9GH2XK7QTP) or the number you paid from',
       paymentInfo: 'Payment Information',
       paymentInstructions: 'Please send payment to:',
       bkash: 'bKash: 01712345678',
@@ -143,10 +140,8 @@ const Appointment = () => {
       selectDistrict: 'জেলা নির্বাচন করুন',
       subject: 'বিষয়/অভ্যাস ক্ষেত্র',
       selectSubject: 'একটি বিষয় নির্বাচন করুন',
-      transactionId: 'ট্রানজেকশন আইডি (TrxID)',
-      transactionIdPh: 'যেমন: 9GH2XK7QTP',
-      paymentNumber: 'যে নম্বর থেকে পেমেন্ট পাঠিয়েছেন',
-      paymentNumberPh: '01XXXXXXXXX (আপনার নম্বর হলেও দিতে পারেন)',
+      paymentRef: 'ট্রানজেকশন আইডি অথবা পেমেন্ট নম্বর',
+      paymentRefPh: 'TrxID (যেমন: 9GH2XK7QTP) অথবা যে নম্বর থেকে পাঠিয়েছেন',
       paymentInfo: 'পেমেন্ট তথ্য',
       paymentInstructions: 'অনুগ্রহ করে পেমেন্ট পাঠান:',
       bkash: 'বিকাশ: 01712345678',
@@ -178,7 +173,7 @@ const Appointment = () => {
                 setStep(1)
                 setSelectedDate('')
                 setSelectedTime('')
-                setFormData({ name: '', phone: '', address: '', subject: '', transactionId: '', paymentNumber: '' })
+                setFormData({ name: '', phone: '', address: '', subject: '', paymentRef: '' })
               }}
               className="px-6 py-3 bg-navy-50 text-white rounded hover:bg-navy-100 transition-colors"
             >
@@ -349,29 +344,15 @@ const Appointment = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {c.transactionId} <span className="text-red-500">*</span>
+                    {c.paymentRef} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     required
-                    value={formData.transactionId}
-                    onChange={(e) => setFormData({...formData, transactionId: e.target.value.toUpperCase()})}
+                    value={formData.paymentRef}
+                    onChange={(e) => setFormData({...formData, paymentRef: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brass-50 focus:border-transparent"
-                    placeholder={c.transactionIdPh}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {c.paymentNumber} <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.paymentNumber}
-                    onChange={(e) => setFormData({...formData, paymentNumber: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brass-50 focus:border-transparent"
-                    placeholder={c.paymentNumberPh}
+                    placeholder={c.paymentRefPh}
                   />
                 </div>
               </div>

@@ -7,9 +7,11 @@ const appointmentSchema = new mongoose.Schema({
   subject: { type: String, required: true },
   date: { type: Date, required: true },
   time: { type: String, required: true },
-  // bKash/Nagad transaction ID of the manual payment
+  // Single payment reference: the bKash/Nagad TrxID OR the number the payment
+  // was sent from — whichever the client has handy (kept for admin matching)
+  paymentRef: { type: String, default: '', trim: true },
+  // Legacy fields from the two-box version (kept so old rows still display)
   transactionId: { type: String, default: '', trim: true },
-  // The mobile number the payment was sent FROM (can differ from the client's personal number)
   paymentNumber: { type: String, default: '', trim: true },
   payment_status: { 
     type: String, 
