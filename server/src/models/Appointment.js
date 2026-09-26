@@ -7,6 +7,10 @@ const appointmentSchema = new mongoose.Schema({
   subject: { type: String, required: true },
   date: { type: Date, required: true },
   time: { type: String, required: true },
+  // bKash/Nagad transaction ID of the manual payment
+  transactionId: { type: String, default: '', trim: true },
+  // The mobile number the payment was sent FROM (can differ from the client's personal number)
+  paymentNumber: { type: String, default: '', trim: true },
   payment_status: { 
     type: String, 
     enum: ['pending', 'paid', 'failed'],
