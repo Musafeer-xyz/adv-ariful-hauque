@@ -1,5 +1,5 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
-import { Home, Calendar, FileText, Clock, User, LogOut, Menu, X } from 'lucide-react'
+import { Home, Calendar, FileText, Clock, User, LogOut, Menu, X, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { adminAPI } from '../services/api'
 
@@ -53,6 +53,14 @@ const AdminLayout = () => {
                   <span>{item.label}</span>
                 </Link>
               ))}
+              <Link
+                to="/"
+                className="flex items-center space-x-2 hover:text-brass-100 transition-colors"
+                title="View the public website"
+              >
+                <ExternalLink size={18} />
+                <span>View Site</span>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="flex items-center space-x-2 hover:text-brass-50 transition-colors"
@@ -90,6 +98,14 @@ const AdminLayout = () => {
                   <span>{item.label}</span>
                 </Link>
               ))}
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center space-x-2 min-h-[44px] py-2 hover:text-brass-100 transition-colors"
+              >
+                <ExternalLink size={18} />
+                <span>View Site</span>
+              </Link>
               <button
                 onClick={() => {
                   handleLogout()
