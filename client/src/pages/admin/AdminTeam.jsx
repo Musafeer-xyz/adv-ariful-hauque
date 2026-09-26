@@ -8,7 +8,7 @@ const AdminTeam = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
-  const [newUser, setNewUser] = useState({ email: '', pin: '' })
+  const [newUser, setNewUser] = useState({ email: '', pin: '', role: 'staff' })
   const [creating, setCreating] = useState(false)
   const [resetFor, setResetFor] = useState(null) // user id being PIN-reset
   const [resetPin, setResetPin] = useState('')
@@ -38,9 +38,9 @@ const AdminTeam = () => {
     }
     try {
       setCreating(true)
-      const res = await adminAPI.createUser(newUser.email, newUser.pin)
+      const res = await adminAPI.createUser(newUser.email, newUser.pin, newUser.role)
       setMessage(`Account created for ${res.data.email} — share the email and PIN with them.`)
-      setNewUser({ email: '', pin: '' })
+      setNewUser({ email: '', pin: '', role: 'staff' })
       await load()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create user')
@@ -145,6 +145,17 @@ const AdminTeam = () => {
               placeholder="••••••"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
+            <select
+              value={newUser.role}
+              onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brass-50 focus:border-transparent"
+            >
+              <option value="staff">Staff</option>
+              <option value="owner">Owner (can manage users too)</option>
+            </select>
+          </div>
           <button
             type="submit"
             disabled={creating}
@@ -181,6 +192,10 @@ const AdminTeam = () => {
                     <span className="inline-flex items-center text-xs font-medium text-brass-50">
                       <ShieldCheck size={14} className="mr-1" /> Owner
                     </span>
+                  ) : user.role === 'developer' ? (
+                    <span className="inline-flex items-center text-xs font-medium text-blue-600">
+                      <ShieldCheck size={14} className="mr-1" /> Developer
+                    </span>
                   ) : (
                     <span className="text-xs text-gray-600">Staff</span>
                   )}
@@ -191,8 +206,8 @@ const AdminTeam = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  {user.role === 'owner' ? (
-                    <span className="text-sm text-gray-400">Owner account is protected</span>
+                  {user.role === 'owner' || user.role === 'developer' ? (
+                    <span className="text-sm text-gray-400">Protected account</span>
                   ) : resetFor === user.id ? (
                     <div className="flex items-center space-x-2">
                       <input

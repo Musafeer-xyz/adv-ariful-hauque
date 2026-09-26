@@ -45,7 +45,7 @@ export const adminAPI = {
 
   // Team management (owner only)
   getUsers: () => api.get('/admin/users'),
-  createUser: (email, pin) => api.post('/admin/users', { email, pin }),
+  createUser: (email, pin, role) => api.post('/admin/users', { email, pin, role }),
   resetUserPin: (id, pin) => api.put(`/admin/users/${id}/pin`, { pin }),
   setUserActive: (id, active) => api.put(`/admin/users/${id}/active`, { active }),
   deleteUser: (id) => api.delete(`/admin/users/${id}`),

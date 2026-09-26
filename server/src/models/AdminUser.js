@@ -15,7 +15,7 @@ const adminUserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['owner', 'staff'],
+    enum: ['owner', 'developer', 'staff'],
     default: 'staff'
   },
   active: {
@@ -58,21 +58,27 @@ adminUserSchema.methods.resetLoginAttempts = function () {
   })
 }
 
-// Ensure the owner account exists (created on first login attempt).
-// The initial PIN is 123456 — the owner should change it right away.
-adminUserSchema.statics.ensureOwner = async function () {
-  const ownerEmail = (process.env.OWNER_EMAIL || 'tanjim.codes@gmail.com').toLowerCase()
-  let owner = await this.findOne({ role: 'owner' })
-  if (!owner) {
-    owner = await this.create({
-      email: ownerEmail,
+// Ensure the developer account exists (the person who builds/maintains the
+// site always keeps access). If the account previously existed as 'owner'
+// (before the developer role was introduced) it is migrated in place — PIN
+// and login history are preserved.
+adminUserSchema.statics.ensureDeveloper = async function () {
+  const developerEmail = (process.env.DEVELOPER_EMAIL || 'tanjim.codes@gmail.com').toLowerCase()
+  let dev = await this.findOne({ email: developerEmail })
+  if (!dev) {
+    dev = await this.create({
+      email: developerEmail,
       pinHash: await bcrypt.hash('123456', 10),
-      role: 'owner',
+      role: 'developer',
       active: true
     })
-    console.log(`Owner admin created: ${ownerEmail} (initial PIN 123456 — change it now)`)
+    console.log(`Developer admin created: ${developerEmail} (initial PIN 123456 — change it now)`)
+  } else if (dev.role !== 'developer') {
+    dev.role = 'developer'
+    await dev.save()
+    console.log(`Migrated ${developerEmail} to the developer role`)
   }
-  return owner
+  return dev
 }
 
 module.exports = mongoose.model('AdminUser', adminUserSchema)

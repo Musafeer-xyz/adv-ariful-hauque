@@ -31,7 +31,7 @@ const AdminLayout = () => {
     { path: '/admin/slots', icon: Clock, label: 'Slots' },
     { path: '/admin/blog', icon: FileText, label: 'Blog' },
     { path: '/admin/profile', icon: User, label: 'Profile' },
-    ...(role === 'owner' ? [{ path: '/admin/team', icon: Users, label: 'Team' }] : [])
+    ...((role === 'owner' || role === 'developer') ? [{ path: '/admin/team', icon: Users, label: 'Team' }] : [])
   ]
 
   return (

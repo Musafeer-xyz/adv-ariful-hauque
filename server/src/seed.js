@@ -78,9 +78,9 @@ const seedDatabase = async () => {
     console.log('Admin Auth created/updated')
     console.log('Default PIN: 123456 (change this in production)')
 
-    console.log('Seeding owner admin user...')
-    const owner = await AdminUser.ensureOwner()
-    console.log(`Owner account ready: ${owner.email}`)
+    console.log('Seeding developer admin user...')
+    const dev = await AdminUser.ensureDeveloper()
+    console.log(`Developer account ready: ${dev.email} (${dev.role})`)
 
     console.log('Database seeded successfully!')
     process.exit(0)

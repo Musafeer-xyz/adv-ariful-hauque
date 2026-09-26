@@ -147,13 +147,14 @@ router.put('/me/pin', authMiddleware, async (req, res) => {
 
 // ---- Team management (owner only) ----
 
+// Owner OR developer can manage admin users
 const requireOwner = async (req, res, next) => {
   try {
     const user = await AdminUser.findById(req.adminId)
-    const isOwner = (user && user.role === 'owner') ||
+    const isPrivileged = (user && (user.role === 'owner' || user.role === 'developer')) ||
       (!user && (await AdminAuth.findById(req.adminId))) // legacy session counts as owner
-    if (!isOwner) {
-      return res.status(403).json({ error: 'Only the owner can manage admin users' })
+    if (!isPrivileged) {
+      return res.status(403).json({ error: 'Only the owner or developer can manage admin users' })
     }
     next()
   } catch (error) {
@@ -194,10 +195,13 @@ router.post('/users', authMiddleware, requireOwner, async (req, res) => {
     if (exists) {
       return res.status(409).json({ error: 'An account with this email already exists' })
     }
+    // Only owner/developer roles can be created deliberately; the developer
+    // role itself is reserved for the seeded maintainer account
+    const requestedRole = role === 'owner' ? 'owner' : 'staff'
     const user = await AdminUser.create({
       email: normalizedEmail,
       pinHash: await bcrypt.hash(pin, 10),
-      role: role === 'owner' ? 'owner' : 'staff'
+      role: requestedRole
     })
     res.status(201).json({ id: user._id, email: user.email, role: user.role, active: user.active })
   } catch (error) {
@@ -240,8 +244,8 @@ router.put('/users/:id/active', authMiddleware, requireOwner, async (req, res) =
     if (!user) {
       return res.status(404).json({ error: 'User not found' })
     }
-    if (user.role === 'owner' && !active) {
-      return res.status(400).json({ error: 'The owner account cannot be deactivated' })
+    if (user.role === 'owner' || user.role === 'developer') {
+      return res.status(400).json({ error: 'Owner and developer accounts cannot be deactivated' })
     }
     user.active = active
     await user.save()
@@ -259,8 +263,8 @@ router.delete('/users/:id', authMiddleware, requireOwner, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' })
     }
-    if (user.role === 'owner') {
-      return res.status(400).json({ error: 'The owner account cannot be deleted' })
+    if (user.role === 'owner' || user.role === 'developer') {
+      return res.status(400).json({ error: 'Owner and developer accounts cannot be deleted' })
     }
     await user.deleteOne()
     res.json({ message: `${user.email} removed` })
