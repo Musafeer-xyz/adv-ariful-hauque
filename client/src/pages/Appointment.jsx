@@ -13,6 +13,7 @@ const Appointment = () => {
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
   const [practiceAreas, setPracticeAreas] = useState([])
+  const [profile, setProfile] = useState(null)
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -52,6 +53,9 @@ const Appointment = () => {
     publicAPI.getPracticeAreas()
       .then((res) => setPracticeAreas(res.data))
       .catch((err) => console.error('Failed to load practice areas:', err))
+    publicAPI.getProfile()
+      .then((res) => setProfile(res.data))
+      .catch((err) => console.error('Failed to load profile:', err))
   }, [])
 
   const fetchSlots = async (date) => {
@@ -343,8 +347,15 @@ const Appointment = () => {
                 </h3>
                 <p className="text-sm text-gray-600 mb-3">{c.paymentInstructions}</p>
                 <div className="space-y-2 text-sm">
-                  <p><strong>bKash:</strong> 01712345678</p>
-                  <p><strong>Nagad:</strong> 01812345678</p>
+                  {profile?.payment?.bkash ? (
+                    <p><strong>{language === 'en' ? 'bKash' : 'বিকাশ'}:</strong> {profile.payment.bkash}</p>
+                  ) : null}
+                  {profile?.payment?.nagad ? (
+                    <p><strong>{language === 'en' ? 'Nagad' : 'নগদ'}:</strong> {profile.payment.nagad}</p>
+                  ) : null}
+                  {!profile?.payment?.bkash && !profile?.payment?.nagad && (
+                    <p className="text-gray-500">{language === 'en' ? 'Payment numbers will be shared after booking.' : 'পেমেন্ট নম্বর বুকিংয়ের পরে জানানো হবে।'}</p>
+                  )}
                 </div>
                 <p className="text-sm text-gray-600 mt-3">{c.afterPayment}</p>
               </div>

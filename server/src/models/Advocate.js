@@ -38,6 +38,11 @@ const advocateSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   whatsapp: { type: String, required: true },
   email: { type: String, required: true },
+  // Manual payment numbers shown on the appointment form (admin-editable)
+  payment: {
+    bkash: { type: String, default: '' },
+    nagad: { type: String, default: '' }
+  },
   imageUrl: {
     type: String,
     default: null
@@ -71,6 +76,7 @@ advocateSchema.statics.getProfile = async function() {
       phone: '+8801234567890',
       whatsapp: '+8801234567890',
       email: 'advocate@example.com',
+      payment: { bkash: '', nagad: '' },
       imageUrl: null
     })
   }

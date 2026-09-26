@@ -25,7 +25,8 @@ const AdminProfile = () => {
     chambers: [],
     phone: '',
     whatsapp: '',
-    email: ''
+    email: '',
+    payment: { bkash: '', nagad: '' }
   })
 
   useEffect(() => {
@@ -37,7 +38,8 @@ const AdminProfile = () => {
         setFormData({
           ...data,
           designation: data.designation || { bn: '', en: '' },
-          chambers: Array.isArray(data.chambers) ? data.chambers : []
+          chambers: Array.isArray(data.chambers) ? data.chambers : [],
+          payment: data.payment || { bkash: '', nagad: '' }
         })
         setPhotoPreview(data.imageUrl)
         setLoading(false)
@@ -486,6 +488,32 @@ const AdminProfile = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="bg-background-100 p-4 rounded-lg mb-6">
+            <h3 className="text-sm font-bold text-navy-50 mb-3">Payment Numbers (shown on the appointment form)</h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">bKash Number</label>
+                <input
+                  type="tel"
+                  value={formData.payment?.bkash || ''}
+                  onChange={(e) => setFormData({...formData, payment: {...formData.payment, bkash: e.target.value}})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brass-50 focus:border-transparent"
+                  placeholder="01XXXXXXXXX"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Nagad Number</label>
+                <input
+                  type="tel"
+                  value={formData.payment?.nagad || ''}
+                  onChange={(e) => setFormData({...formData, payment: {...formData.payment, nagad: e.target.value}})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brass-50 focus:border-transparent"
+                  placeholder="01XXXXXXXXX"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-6">
