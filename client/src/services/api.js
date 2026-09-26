@@ -38,8 +38,17 @@ export const publicAPI = {
 // Admin API calls
 export const adminAPI = {
   // Auth
-  login: (pin, rememberDevice) => api.post('/admin/login', { pin, rememberDevice }),
+  login: (email, pin, rememberDevice) => api.post('/admin/login', { email, pin, rememberDevice }),
   logout: () => api.post('/admin/logout'),
+  me: () => api.get('/admin/me'),
+  changeMyPin: (currentPin, newPin) => api.put('/admin/me/pin', { currentPin, newPin }),
+
+  // Team management (owner only)
+  getUsers: () => api.get('/admin/users'),
+  createUser: (email, pin) => api.post('/admin/users', { email, pin }),
+  resetUserPin: (id, pin) => api.put(`/admin/users/${id}/pin`, { pin }),
+  setUserActive: (id, active) => api.put(`/admin/users/${id}/active`, { active }),
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
   
   // Dashboard
   getDashboard: () => api.get('/admin/dashboard'),

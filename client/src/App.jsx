@@ -15,6 +15,7 @@ import AdminAppointments from './pages/admin/AdminAppointments'
 import AdminSlots from './pages/admin/AdminSlots'
 import AdminBlog from './pages/admin/AdminBlog'
 import AdminProfile from './pages/admin/AdminProfile'
+import AdminTeam from './pages/admin/AdminTeam'
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="slots" element={<AdminSlots />} />
             <Route path="blog" element={<AdminBlog />} />
             <Route path="profile" element={<AdminProfile />} />
+            <Route path="team" element={<AdminTeam />} />
           </Route>
         </Routes>
       </Router>

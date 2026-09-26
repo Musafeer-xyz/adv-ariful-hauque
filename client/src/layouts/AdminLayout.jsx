@@ -1,12 +1,19 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
-import { Home, Calendar, FileText, Clock, User, LogOut, Menu, X, ExternalLink } from 'lucide-react'
-import { useState } from 'react'
+import { Home, Calendar, FileText, Clock, User, Users, LogOut, Menu, X, ExternalLink } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { adminAPI } from '../services/api'
 
 const AdminLayout = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [role, setRole] = useState(null)
+
+  useEffect(() => {
+    adminAPI.me()
+      .then((res) => setRole(res.data?.role || null))
+      .catch(() => setRole(null))
+  }, [location.pathname])
 
   const handleLogout = async () => {
     try {
@@ -24,6 +31,7 @@ const AdminLayout = () => {
     { path: '/admin/slots', icon: Clock, label: 'Slots' },
     { path: '/admin/blog', icon: FileText, label: 'Blog' },
     { path: '/admin/profile', icon: User, label: 'Profile' },
+    ...(role === 'owner' ? [{ path: '/admin/team', icon: Users, label: 'Team' }] : [])
   ]
 
   return (

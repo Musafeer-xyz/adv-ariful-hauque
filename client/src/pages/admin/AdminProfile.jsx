@@ -126,7 +126,7 @@ const AdminProfile = () => {
 
     try {
       setPinSaving(true)
-      await adminAPI.changePin(pinForm.currentPin, pinForm.newPin)
+      await adminAPI.changeMyPin(pinForm.currentPin, pinForm.newPin)
       setPinForm({ currentPin: '', newPin: '', confirmPin: '' })
       setPinMessage({ type: 'success', text: 'PIN updated successfully. Use the new PIN next time you log in.' })
     } catch (err) {
@@ -573,7 +573,7 @@ const AdminProfile = () => {
           Security
         </h2>
         <p className="text-sm text-gray-500 mb-6">
-          Set or reset the 6-digit PIN used to sign in to this admin panel.
+          Change the 6-digit PIN for <strong>your own account</strong>. (Owners reset staff PINs from the Team page.)
         </p>
         <form onSubmit={handlePinChange} className="max-w-md">
           {pinMessage.text && (

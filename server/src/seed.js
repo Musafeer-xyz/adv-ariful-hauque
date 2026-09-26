@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs')
 const Advocate = require('./models/Advocate')
 const PracticeArea = require('./models/PracticeArea')
 const AdminAuth = require('./models/AdminAuth')
+const AdminUser = require('./models/AdminUser')
 
 const MONGODB_URI = process.env.MONGODB_URI
 
@@ -71,11 +72,15 @@ const seedDatabase = async () => {
     }
     console.log('Practice Areas seeded')
 
-    // Create admin auth
+    // Create admin auth (legacy) + owner admin user
     console.log('Seeding Admin Auth...')
     const adminAuth = await AdminAuth.getAuth()
     console.log('Admin Auth created/updated')
     console.log('Default PIN: 123456 (change this in production)')
+
+    console.log('Seeding owner admin user...')
+    const owner = await AdminUser.ensureOwner()
+    console.log(`Owner account ready: ${owner.email}`)
 
     console.log('Database seeded successfully!')
     process.exit(0)

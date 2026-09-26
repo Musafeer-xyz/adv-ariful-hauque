@@ -4,6 +4,7 @@ import { adminAPI } from '../../services/api'
 import { Loader2, AlertCircle } from 'lucide-react'
 
 const AdminLogin = () => {
+  const [email, setEmail] = useState('')
   const [pin, setPin] = useState('')
   const [rememberDevice, setRememberDevice] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -21,7 +22,7 @@ const AdminLogin = () => {
 
     try {
       setLoading(true)
-      await adminAPI.login(pin, rememberDevice)
+      await adminAPI.login(email || undefined, pin, rememberDevice)
       navigate('/admin')
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed')
@@ -50,6 +51,20 @@ const AdminLogin = () => {
         )}
 
         <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Email <span className="text-gray-400 font-normal">(owner & staff accounts)</span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brass-50 focus:border-transparent"
+              placeholder="you@example.com"
+              autoComplete="username"
+            />
+          </div>
+
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Enter 6-digit PIN
