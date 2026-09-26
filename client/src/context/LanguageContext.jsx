@@ -12,7 +12,9 @@ export const useLanguage = () => {
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('language') || 'en'
+    // Default to Bengali for first-time visitors; a visitor's explicit choice
+    // is persisted and wins over the default
+    return localStorage.getItem('language') || 'bn'
   })
 
   useEffect(() => {
